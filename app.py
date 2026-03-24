@@ -9,7 +9,12 @@ from PIL import Image
 
 
 def update_params():
-    st.set_query_params(challenge=st.session_state.day)
+    if hasattr(st, "query_params"):
+        st.query_params["challenge"] = st.session_state.day
+    elif hasattr(st, "set_query_params"):
+        st.set_query_params(challenge=st.session_state.day)
+    else:
+        st.experimental_set_query_params(challenge=st.session_state.day)
 
 
 md_files = sorted(
@@ -24,11 +29,19 @@ st.markdown("# 30 Days of Streamlit")
 
 days_list = [f"Day {x}" for x in md_files]
 
-query_params = st.get_query_params()
+if hasattr(st, "query_params"):
+    query_params = st.query_params
+elif hasattr(st, "get_query_params"):
+    query_params = st.get_query_params()
+else:
+    query_params = st.experimental_get_query_params()
 
 try:
-    if query_params and query_params["challenge"][0] in days_list:
-        st.session_state.day = query_params["challenge"][0]
+    challenge = query_params["challenge"]
+    if isinstance(challenge, list):
+        challenge = challenge[0]
+    if challenge in days_list:
+        st.session_state.day = challenge
 except KeyError:
     st.session_state.day = days_list[0]
 
