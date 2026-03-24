@@ -1,2 +1,5 @@
+streamlit
+watchdog
+
 pandas
-click==8.0
+click

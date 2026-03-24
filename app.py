@@ -9,7 +9,7 @@ from PIL import Image
 
 
 def update_params():
-    st.experimental_set_query_params(challenge=st.session_state.day)
+    st.set_query_params(challenge=st.session_state.day)
 
 
 md_files = sorted(
@@ -24,7 +24,7 @@ st.markdown("# 30 Days of Streamlit")
 
 days_list = [f"Day {x}" for x in md_files]
 
-query_params = st.experimental_get_query_params()
+query_params = st.get_query_params()
 
 try:
     if query_params and query_params["challenge"][0] in days_list:
